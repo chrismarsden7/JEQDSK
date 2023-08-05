@@ -53,10 +53,12 @@ def read(path):
     # Close the jeqdsk file
     f.close()
 
-    # Convert the 1D pprime, ffprime and q data into numpy arrays
+    # Convert the 1D pprime, ffprime, q, fpol and pres data into numpy arrays
     data['pprime'] = np.asarray(data['pprime'])
     data['ffprime'] = np.asarray(data['ffprime'])
     data['qpsi'] = np.asarray(data['qpsi'])
+    data['fpol'] = np.asarray(data['fpol'])
+    data['pres'] = np.asarray(data['pres'])
 
     # Convert the 2D psi grid into a numpy array
     data['psi'] = np.asarray(data['psi'])
