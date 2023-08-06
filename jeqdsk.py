@@ -274,7 +274,7 @@ def convert_jeqdsk_to_geqdsk(path_g,path_j):
     with open(path_g,'w+') as f:
     
         # Write data to the file
-        geqdsk.write(f,data)
+        geqdsk.write(data,f)
 
     # Close the geqdsk
     f.close()
