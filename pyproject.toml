@@ -1,13 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "jeqdsk"
+version = "0.1.1"
+authors = [
+  { name="Chris Marsden"},
+]
 description = "JEQDSK tokamak equilibrium file reader/writer"
 readme = "README.md"
-authors = [
-    {name = "Chris Marsden"},
-]
-license = {file = "LICENSE"}
-dynamic = ["version"]
-keywords = ["JEQDSK", "GEQDSK", "plasma", "equilibrium"]
 classifiers = [
     "Programming Language :: Python",
     "Development Status :: 3 - Alpha",
@@ -29,16 +31,3 @@ dependencies = [
 [project.urls]
 Source = "https://github.com/chrismarsden7/JEQDSK"
 Tracker = "https://github.com/chrismarsden7/JEQDSK/issues"
-
-[build-system]
-requires = [
-    "setuptools >= 65",
-    "setuptools_scm[toml] >= 6.2",
-    "setuptools_scm_git_archive",
-    "wheel >= 0.29.0",
-]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools_scm]
-write_to = "jeqdsk/_version.py"
-git_describe_command = "git describe --dirty --tags --long --match v* --first-parent"
