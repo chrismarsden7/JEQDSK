@@ -69,3 +69,8 @@ jeqdsk.plot_data(data)
 
 ## Contact
 Please feel free to contact me through the issues page
+
+## To-do
+* Add installation instructions
+* Add standard GEQDSK entries description
+* PyPi distribution
