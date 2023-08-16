@@ -4,6 +4,7 @@ import numpy as np
 from freeqdsk import geqdsk
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
+import jsbeautifier
 
 class NumpyArrayEncoder(JSONEncoder):
     '''
@@ -82,10 +83,20 @@ def write(path,data,encoder=NumpyArrayEncoder):
 
     '''
 
+    # Open the output file
     with open(path,'w+') as f:
 
-        json.dump(data,f,cls=encoder,indent=4)
+        # Set the indent size
+        options = jsbeautifier.default_options()
+        options.indent_size = 2
 
+        # Create the jsonified output as a string, and beautify it
+        out_str = jsbeautifier.beautify(json.dumps(data,cls=encoder), options)
+
+        # Write the json string to the output file
+        f.write(out_str)
+
+    # Close the file
     f.close()
 
 def display_contents(data):
@@ -283,14 +294,14 @@ if __name__ == '__main__':
 
     # Read the example d3d jeqdsk and display its contents.
 
-    data = read('./data/diiid.jeqdsk')
+    data = read('../../data/diiid.jeqdsk')
 
     display_contents(data)
 
     plot_data(data)
 
     # Convert the example jeqdsk to a new geqdsk
-    convert_jeqdsk_to_geqdsk('./data/diiid_new.geqdsk','./data/diiid.jeqdsk')
+    convert_jeqdsk_to_geqdsk('../../data/diiid_new.geqdsk','../../data/diiid.jeqdsk')
 
     # Convert the example geqdsk to a new jeqdsk
-    convert_geqdsk_to_jeqdsk('./data/diiid.geqdsk','./data/diiid_new.jeqdsk')
+    convert_geqdsk_to_jeqdsk('../../data/diiid.geqdsk','../../data/diiid_new.jeqdsk')
