@@ -73,4 +73,5 @@ Please feel free to contact me through the issues page
 ## To-do
 * Add installation instructions
 * Add standard GEQDSK entries description
+* Add GEQDSK metadata
 * PyPi distribution
