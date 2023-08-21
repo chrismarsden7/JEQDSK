@@ -238,19 +238,25 @@ def plot_data(data):
 
 def read_first_line_geqdsk(fp):
     '''
-    Reads the first line of a GEQDSK
+    Reads the first line of a GEQDSK and extracts the
+    label, date, shot number and time.
 
     Inputs:
     fp - Filehander for the GEQDSK being read
 
     Returns:
 
+    label (str), date (str), shot (int), time (int)
     '''
-    fp.seek(0)
-    lines = fp.readlines()
-    first_line = lines[0]
 
-    print(first_line)
+    # Place the cursor at the start of the file
+    fp.seek(0)
+
+    # Read all of the lines in the file
+    lines = fp.readlines()
+
+    # Extract the first line only
+    first_line = lines[0]
 
     # Get the label
     find_label = True
@@ -350,14 +356,10 @@ def read_first_line_geqdsk(fp):
 
         else:
             end_time= i - 1
-            time = first_line[start_time:start_time+1]
+            time = first_line[start_time:end_time+1]
             find_time = False
 
-    print(label)
-    print(date)
-    print(shot)
-    print(time)
-    
+    return str(label), str(date), int(shot), int(time)
 
 def convert_geqdsk_to_jeqdsk(path_g,path_j):
     '''
@@ -382,10 +384,16 @@ def convert_geqdsk_to_jeqdsk(path_g,path_j):
 
         # At present the FreeQDSK GEQDSK reader does not extract data from
         # the first line. This is performed below
-        read_first_line_geqdsk(f)
+        label, date, shot, time = read_first_line_geqdsk(f)
 
     # Close the geqdsk
     f.close()
+
+    # Add the first line data to the data dict
+    data['label'] = label
+    data['date'] = date
+    data['shot'] = shot
+    data['time'] = time
 
     # Write the jeqdsk
     write(path_j,data)
@@ -412,7 +420,7 @@ def convert_jeqdsk_to_geqdsk(path_g,path_j):
     with open(path_g,'w+') as f:
     
         # Write data to the file
-        geqdsk.write(data,f)
+        geqdsk.write(data,f,data['label'],data['shot'],data['time'])
 
     # Close the geqdsk
     f.close()
