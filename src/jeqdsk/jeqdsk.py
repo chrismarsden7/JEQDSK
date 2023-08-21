@@ -236,6 +236,129 @@ def plot_data(data):
 
     plt.show()
 
+def read_first_line_geqdsk(fp):
+    '''
+    Reads the first line of a GEQDSK
+
+    Inputs:
+    fp - Filehander for the GEQDSK being read
+
+    Returns:
+
+    '''
+    fp.seek(0)
+    lines = fp.readlines()
+    first_line = lines[0]
+
+    print(first_line)
+
+    # Get the label
+    find_label = True
+    found_first_label_char = False
+    i = 0
+    while find_label:
+        
+        char = first_line[i]
+
+        if char == ' ' and not found_first_label_char:
+            i += 1
+
+        elif char != ' ' and not found_first_label_char:
+            found_first_label_char = True
+            start_label = i
+            i += 1
+
+        elif char != ' ' and found_first_label_char:
+            i += 1
+
+        else:
+            end_label = i - 1
+            label = first_line[start_label:end_label+1]
+            find_label = False
+
+    # Get the date
+    find_date = True
+    i = end_label + 1
+    found_first_date_char = False
+    while find_date:
+
+        char = first_line[i]
+
+        if char ==' ' and not found_first_date_char:
+            i += 1
+
+        elif char != ' ' and not found_first_date_char:
+            found_first_date_char = True
+            start_date = i
+            i += 1
+
+        elif char != ' ' and found_first_date_char:
+            i += 1
+
+        else:
+            end_date = i - 1
+            date = first_line[start_date:end_date+1]
+            find_date = False
+
+    # Now find the shot number. This is somewhere to the right of the # symbol
+    # and may or may not be separated by spaces.
+    hash_pos = first_line.rfind('#')
+    find_shot = True
+    i = hash_pos + 1
+    found_first_shot_char = False
+    while find_shot:
+
+        char = first_line[i]
+
+        if char == ' ' and not found_first_shot_char:
+            i += 1
+
+        elif char!=' ' and not found_first_shot_char:
+            found_first_shot_char = True
+            start_shot = i
+            i += 1
+
+        elif char != ' ' and found_first_shot_char:
+            i += 1
+
+        else:
+            end_shot = i - 1
+            shot = first_line[start_shot:end_shot+1]
+            find_shot = False
+
+    # Now find the time. This is expressed by an integer to the right of
+    # the shot number, separated by some spaces, and ends with 'ms'. It may
+    # be that there is a space between the time and the units, and it may be
+    # that the units are in 's'. All of these are handled.
+    find_time = True
+    i = end_shot + 1
+    found_first_time_char = False
+    while find_time:
+
+        char = first_line[i]
+
+        if char == ' ' and not found_first_time_char:
+            i += 1
+
+        elif char!=' ' and not found_first_time_char:
+            found_first_time_char = True
+            start_time = i
+            i += 1
+
+        elif char!= (' ' or 'm' or 's') and found_first_time_char:
+            i += 1
+
+        else:
+            end_time= i - 1
+            time = first_line[start_time:start_time+1]
+            find_time = False
+
+    print(label)
+    print(date)
+    print(shot)
+    print(time)
+    
+
 def convert_geqdsk_to_jeqdsk(path_g,path_j):
     '''
     Converts a geqdsk to a jeqdsk
@@ -256,6 +379,10 @@ def convert_geqdsk_to_jeqdsk(path_g,path_j):
     
         # Read its contents
         data = geqdsk.read(f)
+
+        # At present the FreeQDSK GEQDSK reader does not extract data from
+        # the first line. This is performed below
+        read_first_line_geqdsk(f)
 
     # Close the geqdsk
     f.close()
